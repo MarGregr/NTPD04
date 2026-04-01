@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  #Serwis aplikacji
+  web-api:
+    build: .
+    container_name: ml_api_container
+    ports:
+      - "8000:8000"
+    environment:
+      - WORKERS_COUNT=4
+      - APP_ENV=production
+    networks:
+      - ml_network
+    depends_on:
+      - redis-db
+
+  #Drugi serwis, lekka baza danych Redis
+  redis-db:
+    image: "redis:alpine"
+    container_name: redis_container
+    networks:
+      - ml_network
+
+networks:
+  ml_network:
+    driver: bridge
